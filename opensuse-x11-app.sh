@@ -25,24 +25,21 @@ pkg install pavucontrol-qt firefox -y
 yes | proot-distro install opensuse
 
 # Update proot-distro
-yes | proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 apt update
-yes | proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 apt upgrade
+yes | proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 zypper up
+yes | proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 zypper dup
 
 # Set timezone to phone / tablet's tz
 timezone=$(getprop persist.sys.timezone); proot-distro login opensuse --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime; proot-distro login opensuse --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$timezone /etc/localtime
 
 #Install proot-distro packages (sudo, gui, terminal)
-proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 apt install sudo xfce4 xfce4-terminal dbus-x11 -y
+proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 zypper in sudo xfce4 xfce4-terminal dbus-x11 -y
 
 # Removes glitchy xterminal
-proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 apt remove xterm -y
+proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 zypper rm xterm -y
 
 # Set xfce4-terminal as the default terminal
 proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/xfce4-terminal 50
 proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal
-
-# Removes Debian Sensible Web Browser
-proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 apt remove sensible-utils -y
 
 # Create user
 proot-distro login opensuse --shared-tmp -- env DISPLAY=:1 groupadd storage
